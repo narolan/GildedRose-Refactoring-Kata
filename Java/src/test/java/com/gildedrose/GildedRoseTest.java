@@ -75,6 +75,16 @@ class GildedRoseTest {
             assertEquals(-1, app.items[0].sellIn);
             assertEquals(20, app.items[0].quality);
         }
+
+        @Test
+        void sulfurasItemUpdate_whenAfterSellInDateAndNegativeQuality_doNothingToQuality() {
+            Item[] items = new Item[] { new Item(SULFURAS.getName(), -1, -20) };
+            GildedRose app = new GildedRose(items);
+            app.updateQuality();
+            assertEquals(SULFURAS.getName(), app.items[0].name);
+            assertEquals(-1, app.items[0].sellIn);
+            assertEquals(-20, app.items[0].quality);
+        }
     }
 
     @Nested

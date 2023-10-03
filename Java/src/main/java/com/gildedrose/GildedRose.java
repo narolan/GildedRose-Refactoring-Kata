@@ -1,21 +1,30 @@
 package com.gildedrose;
 
+import java.util.Objects;
+
 import static com.gildedrose.ItemCategory.*;
 
 class GildedRose {
     Item[] items;
+    NormalItemQualityUpdate normalItemQualityUpdate;
 
     public GildedRose(Item[] items) {
         this.items = items;
+        this.normalItemQualityUpdate = new NormalItemQualityUpdate();
     }
 
     public void updateQuality() {
         for (Item item : items) {
+            if (NORMAL.equals(fromName(item.name))) {
+                normalItemQualityUpdate.updateQuality(item);
+                return;
+            }
+
             if (!item.name.equals(AGED_BRIE.getName())
                     && !item.name.equals(BACKSTAGE_PASSES.getName())) {
                 if (item.quality > 0) {
-                    if (!item.name.equals(SULFURAS.getName())) {
-                        item.quality = item.quality - 1;
+                    if (item.name.equals(SULFURAS.getName())) {
+                        //do nothing
                     }
                 }
             } else {
@@ -46,8 +55,8 @@ class GildedRose {
                 if (!item.name.equals(AGED_BRIE.getName())) {
                     if (!item.name.equals(BACKSTAGE_PASSES.getName())) {
                         if (item.quality > 0) {
-                            if (!item.name.equals(SULFURAS.getName())) {
-                                item.quality = item.quality - 1;
+                            if (item.name.equals(SULFURAS.getName())) {
+                                //do nothing
                             }
                         }
                     } else {
