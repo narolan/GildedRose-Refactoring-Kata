@@ -204,4 +204,57 @@ class GildedRoseTest {
             assertEquals(0, app.items[0].quality);
         }
     }
+
+    @Nested
+    class ConjuredItems {
+        @Test
+        void conjuredItemUpdateDoesNotDecreaseQualityBelowZero() {
+            Item[] items = new Item[] { new Item(CONJURED.getName(), 0, 0) };
+            GildedRose app = new GildedRose(items);
+            app.updateQuality();
+            assertEquals(CONJURED.getName(), app.items[0].name);
+            assertEquals(-1, app.items[0].sellIn);
+            assertEquals(0, app.items[0].quality);
+        }
+
+        @Test
+        void conjuredItemUpdateDecreasesQualityByTwo() {
+            Item[] items = new Item[] { new Item(CONJURED.getName(), 1, 3) };
+            GildedRose app = new GildedRose(items);
+            app.updateQuality();
+            assertEquals(CONJURED.getName(), app.items[0].name);
+            assertEquals(0, app.items[0].sellIn);
+            assertEquals(1, app.items[0].quality);
+        }
+
+        @Test
+        void conjuredItemUpdateDoesNotDecreaseBelowZero() {
+            Item[] items = new Item[] { new Item(CONJURED.getName(), 1, 0) };
+            GildedRose app = new GildedRose(items);
+            app.updateQuality();
+            assertEquals(CONJURED.getName(), app.items[0].name);
+            assertEquals(0, app.items[0].sellIn);
+            assertEquals(0, app.items[0].quality);
+        }
+
+        @Test
+        void conjuredItemUpdate_whenAfterSellInDate_decreasesQualityByFour() {
+            Item[] items = new Item[] { new Item(CONJURED.getName(), -1, 5) };
+            GildedRose app = new GildedRose(items);
+            app.updateQuality();
+            assertEquals(CONJURED.getName(), app.items[0].name);
+            assertEquals(-2, app.items[0].sellIn);
+            assertEquals(1, app.items[0].quality);
+        }
+
+        @Test
+        void conjuredItemUpdate_whenQualityWouldGoBelowZero_qualityRemainsZero() {
+            Item[] items = new Item[] { new Item(CONJURED.getName(), -1, 1) };
+            GildedRose app = new GildedRose(items);
+            app.updateQuality();
+            assertEquals(CONJURED.getName(), app.items[0].name);
+            assertEquals(-2, app.items[0].sellIn);
+            assertEquals(0, app.items[0].quality);
+        }
+    }
 }

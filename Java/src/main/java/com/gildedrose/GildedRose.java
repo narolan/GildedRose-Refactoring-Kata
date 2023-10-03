@@ -1,9 +1,6 @@
 package com.gildedrose;
 
-import com.gildedrose.process.AgedBrieItemQualityUpdate;
-import com.gildedrose.process.BackstagePassesItemQualityUpdate;
-import com.gildedrose.process.NormalItemQualityUpdate;
-import com.gildedrose.process.SulfarasItemQualityUpdate;
+import com.gildedrose.process.*;
 
 import static com.gildedrose.ItemCategory.fromName;
 
@@ -14,6 +11,7 @@ class GildedRose {
     private final SulfarasItemQualityUpdate sulfarasItemQualityUpdate;
     private final BackstagePassesItemQualityUpdate backstagePassesItemQualityUpdate;
     private final AgedBrieItemQualityUpdate agedBrieItemQualityUpdate;
+    private final ConjuredItemQualityUpdate conjuredItemQualityUpdate;
 
     public GildedRose(Item[] items) {
         this.items = items;
@@ -21,6 +19,7 @@ class GildedRose {
         this.sulfarasItemQualityUpdate = new SulfarasItemQualityUpdate();
         this.backstagePassesItemQualityUpdate = new BackstagePassesItemQualityUpdate();
         this.agedBrieItemQualityUpdate = new AgedBrieItemQualityUpdate();
+        this.conjuredItemQualityUpdate = new ConjuredItemQualityUpdate();
     }
 
     public void updateQuality() {
@@ -34,6 +33,9 @@ class GildedRose {
                     return;
                 case AGED_BRIE:
                     agedBrieItemQualityUpdate.updateQuality(item);
+                    return;
+                case CONJURED:
+                    conjuredItemQualityUpdate.updateQuality(item);
                     return;
                 default:
                     normalItemQualityUpdate.updateQuality(item);
