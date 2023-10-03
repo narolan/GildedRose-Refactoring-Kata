@@ -1,72 +1,43 @@
 package com.gildedrose;
 
-import java.util.Objects;
+import com.gildedrose.process.AgedBrieItemQualityUpdate;
+import com.gildedrose.process.BackstagePassesItemQualityUpdate;
+import com.gildedrose.process.NormalItemQualityUpdate;
+import com.gildedrose.process.SulfarasItemQualityUpdate;
 
-import static com.gildedrose.ItemCategory.*;
+import static com.gildedrose.ItemCategory.fromName;
 
 class GildedRose {
+
     Item[] items;
-    NormalItemQualityUpdate normalItemQualityUpdate;
+    private final NormalItemQualityUpdate normalItemQualityUpdate;
+    private final SulfarasItemQualityUpdate sulfarasItemQualityUpdate;
+    private final BackstagePassesItemQualityUpdate backstagePassesItemQualityUpdate;
+    private final AgedBrieItemQualityUpdate agedBrieItemQualityUpdate;
 
     public GildedRose(Item[] items) {
         this.items = items;
         this.normalItemQualityUpdate = new NormalItemQualityUpdate();
+        this.sulfarasItemQualityUpdate = new SulfarasItemQualityUpdate();
+        this.backstagePassesItemQualityUpdate = new BackstagePassesItemQualityUpdate();
+        this.agedBrieItemQualityUpdate = new AgedBrieItemQualityUpdate();
     }
 
     public void updateQuality() {
         for (Item item : items) {
-            if (NORMAL.equals(fromName(item.name))) {
-                normalItemQualityUpdate.updateQuality(item);
-                return;
-            }
-
-            if (!item.name.equals(AGED_BRIE.getName())
-                    && !item.name.equals(BACKSTAGE_PASSES.getName())) {
-                if (item.quality > 0) {
-                    if (item.name.equals(SULFURAS.getName())) {
-                        //do nothing
-                    }
-                }
-            } else {
-                if (item.quality < 50) {
-                    item.quality = item.quality + 1;
-
-                    if (item.name.equals(BACKSTAGE_PASSES.getName())) {
-                        if (item.sellIn < 11) {
-                            if (item.quality < 50) {
-                                item.quality = item.quality + 1;
-                            }
-                        }
-
-                        if (item.sellIn < 6) {
-                            if (item.quality < 50) {
-                                item.quality = item.quality + 1;
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (!item.name.equals(SULFURAS.getName())) {
-                item.sellIn = item.sellIn - 1;
-            }
-
-            if (item.sellIn < 0) {
-                if (!item.name.equals(AGED_BRIE.getName())) {
-                    if (!item.name.equals(BACKSTAGE_PASSES.getName())) {
-                        if (item.quality > 0) {
-                            if (item.name.equals(SULFURAS.getName())) {
-                                //do nothing
-                            }
-                        }
-                    } else {
-                      item.quality = 0;
-                    }
-                } else {
-                    if (item.quality < 50) {
-                        item.quality = item.quality + 1;
-                    }
-                }
+            switch(fromName(item.name)) {
+                case SULFURAS:
+                    sulfarasItemQualityUpdate.updateQuality(item);
+                    return;
+                case BACKSTAGE_PASSES:
+                    backstagePassesItemQualityUpdate.updateQuality(item);
+                    return;
+                case AGED_BRIE:
+                    agedBrieItemQualityUpdate.updateQuality(item);
+                    return;
+                default:
+                    normalItemQualityUpdate.updateQuality(item);
+                    return;
             }
         }
     }

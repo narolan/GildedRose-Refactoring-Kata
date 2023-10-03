@@ -1,4 +1,6 @@
-package com.gildedrose;
+package com.gildedrose.process;
+
+import com.gildedrose.Item;
 
 public class NormalItemQualityUpdate implements ItemQualityUpdate {
 
