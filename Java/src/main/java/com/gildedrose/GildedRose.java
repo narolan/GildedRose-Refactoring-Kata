@@ -24,23 +24,9 @@ class GildedRose {
 
     public void updateQuality() {
         for (Item item : items) {
-            switch(fromName(item.name)) {
-                case SULFURAS:
-                    sulfarasItemQualityUpdate.updateQuality(item);
-                    return;
-                case BACKSTAGE_PASSES:
-                    backstagePassesItemQualityUpdate.updateQuality(item);
-                    return;
-                case AGED_BRIE:
-                    agedBrieItemQualityUpdate.updateQuality(item);
-                    return;
-                case CONJURED:
-                    conjuredItemQualityUpdate.updateQuality(item);
-                    return;
-                default:
-                    normalItemQualityUpdate.updateQuality(item);
-                    return;
-            }
+            ItemCategory itemCategory = fromName(item.name);
+            ItemQualityUpdate itemQualityUpdater = ItemQualityUpdateFactory.getItemQualityUpdater(itemCategory);
+            itemQualityUpdater.updateQuality(item);
         }
     }
 }
